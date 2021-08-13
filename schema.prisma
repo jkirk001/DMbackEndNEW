@@ -1,0 +1,103 @@
+datasource postgresql {
+  url      = env("DATABASE_URL")
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "node_modules/.prisma/client"
+}
+
+model User {
+  id       String  @id @default(cuid())
+  name     String?
+  email    String? @unique
+  password String?
+  posts    Post[]  @relation("Post_author")
+}
+
+model Post {
+  id                       String          @id @default(cuid())
+  brand                    Brand?          @relation("Post_brand", fields: [brandId], references: [id])
+  brandId                  String?         @map("brand")
+  strain                   Strain?         @relation("Post_strain", fields: [strainId], references: [id])
+  strainId                 String?         @map("strain")
+  type                     Type?           @relation("Post_type", fields: [typeId], references: [id])
+  typeId                   String?         @unique @map("type")
+  pheno                    Pheno?          @relation("Pheno_posts")
+  rating                   Int?
+  tasteRating              Int?
+  aromaRating              Int?
+  thc                      Int?
+  status                   String?
+  content                  Json?
+  publishDate              DateTime?
+  author                   User?           @relation("Post_author", fields: [authorId], references: [id])
+  authorId                 String?         @map("author")
+  aromaTags                AromaTag[]      @relation("AromaTag_posts_Post_aromaTags")
+  tasteTags                TasteTag[]      @relation("Post_tasteTags_TasteTag_posts")
+  from_BrandItemType_posts BrandItemType[] @relation("BrandItemType_posts_many")
+
+  @@index([brandId])
+  @@index([strainId])
+  @@index([authorId])
+}
+
+model AromaTag {
+  id    String  @id @default(cuid())
+  name  String?
+  posts Post[]  @relation("AromaTag_posts_Post_aromaTags")
+}
+
+model TasteTag {
+  id    String  @id @default(cuid())
+  name  String?
+  posts Post[]  @relation("Post_tasteTags_TasteTag_posts")
+}
+
+model Brand {
+  id                       String          @id @default(cuid())
+  name                     String?
+  posts                    Post[]          @relation("Post_brand")
+  totalRating              Int?
+  totalPosts               Int?
+  from_BrandItemType_brand BrandItemType[] @relation("BrandItemType_brand")
+}
+
+model BrandItemType {
+  id          String  @id @default(cuid())
+  brand       Brand?  @relation("BrandItemType_brand", fields: [brandId], references: [id])
+  brandId     String? @map("brand")
+  strain      Strain? @relation("BrandItemType_strain", fields: [strainId], references: [id])
+  strainId    String? @map("strain")
+  type        Type?   @relation("BrandItemType_type", fields: [typeId], references: [id])
+  typeId      String? @map("type")
+  totalRating Int?
+  totalPosts  Int?
+  posts       Post[]  @relation("BrandItemType_posts_many")
+
+  @@index([brandId])
+  @@index([strainId])
+  @@index([typeId])
+}
+
+model Strain {
+  id                        String          @id @default(cuid())
+  name                      String?
+  posts                     Post[]          @relation("Post_strain")
+  from_BrandItemType_strain BrandItemType[] @relation("BrandItemType_strain")
+}
+
+model Type {
+  id                      String          @id @default(cuid())
+  name                    String?
+  posts                   Post?           @relation("Post_type")
+  from_BrandItemType_type BrandItemType[] @relation("BrandItemType_type")
+}
+
+model Pheno {
+  id      String  @id @default(cuid())
+  name    String?
+  posts   Post?   @relation("Pheno_posts", fields: [postsId], references: [id])
+  postsId String? @unique @map("posts")
+}
