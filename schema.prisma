@@ -23,8 +23,9 @@ model Post {
   strain      Strain?        @relation("Post_strain", fields: [strainId], references: [id])
   strainId    String?        @map("strain")
   type        Type?          @relation("Post_type", fields: [typeId], references: [id])
-  typeId      String?        @unique @map("type")
-  pheno       Pheno?         @relation("Pheno_posts")
+  typeId      String?        @map("type")
+  pheno       Pheno?         @relation("Post_pheno", fields: [phenoId], references: [id])
+  phenoId     String?        @map("pheno")
   rel         BrandItemType? @relation("Post_rel", fields: [relId], references: [id])
   relId       String?        @map("rel")
   rating      Int?
@@ -41,8 +42,16 @@ model Post {
 
   @@index([brandId])
   @@index([strainId])
+  @@index([typeId])
+  @@index([phenoId])
   @@index([relId])
   @@index([authorId])
+}
+
+model TasteTag {
+  id    String  @id @default(cuid())
+  name  String?
+  posts Post[]  @relation("Post_tasteTags_TasteTag_posts")
 }
 
 model AromaTag {
@@ -51,10 +60,24 @@ model AromaTag {
   posts Post[]  @relation("AromaTag_posts_Post_aromaTags")
 }
 
-model TasteTag {
-  id    String  @id @default(cuid())
-  name  String?
-  posts Post[]  @relation("Post_tasteTags_TasteTag_posts")
+model BrandItemType {
+  id               String  @id @default(cuid())
+  brand            Brand?  @relation("BrandItemType_brand", fields: [brandId], references: [id])
+  brandId          String? @map("brand")
+  strain           Strain? @relation("BrandItemType_strain", fields: [strainId], references: [id])
+  strainId         String? @map("strain")
+  type             Type?   @relation("BrandItemType_type", fields: [typeId], references: [id])
+  typeId           String? @map("type")
+  totalRating      Int?
+  totalTHC         Int?
+  totalTasteRating Int?
+  totalAromaRating Int?
+  totalPosts       Int?
+  posts            Post[]  @relation("Post_rel")
+
+  @@index([brandId])
+  @@index([strainId])
+  @@index([typeId])
 }
 
 model Brand {
@@ -66,23 +89,6 @@ model Brand {
   from_BrandItemType_brand BrandItemType[] @relation("BrandItemType_brand")
 }
 
-model BrandItemType {
-  id          String  @id @default(cuid())
-  brand       Brand?  @relation("BrandItemType_brand", fields: [brandId], references: [id])
-  brandId     String? @map("brand")
-  strain      Strain? @relation("BrandItemType_strain", fields: [strainId], references: [id])
-  strainId    String? @map("strain")
-  type        Type?   @relation("BrandItemType_type", fields: [typeId], references: [id])
-  typeId      String? @map("type")
-  totalRating Int?
-  totalPosts  Int?
-  posts       Post[]  @relation("Post_rel")
-
-  @@index([brandId])
-  @@index([strainId])
-  @@index([typeId])
-}
-
 model Strain {
   id                        String          @id @default(cuid())
   name                      String?
@@ -90,16 +96,15 @@ model Strain {
   from_BrandItemType_strain BrandItemType[] @relation("BrandItemType_strain")
 }
 
+model Pheno {
+  id    String  @id @default(cuid())
+  name  String?
+  posts Post[]  @relation("Post_pheno")
+}
+
 model Type {
   id                      String          @id @default(cuid())
   name                    String?
-  posts                   Post?           @relation("Post_type")
+  posts                   Post[]          @relation("Post_type")
   from_BrandItemType_type BrandItemType[] @relation("BrandItemType_type")
-}
-
-model Pheno {
-  id      String  @id @default(cuid())
-  name    String?
-  posts   Post?   @relation("Pheno_posts", fields: [postsId], references: [id])
-  postsId String? @unique @map("posts")
 }

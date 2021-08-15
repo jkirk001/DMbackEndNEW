@@ -11,15 +11,12 @@ export const Brand = list({
     }),
     totalRating: integer({ defaultValue: 0 }),
     totalPosts: integer({ defaultValue: 0 }),
+    //! virtual field to resolve avg
     avgRating: virtual({
       field: schema.field({
         type: schema.Float,
-        async resolve(item, args, context, info) {
-          const total = await context.lists.Brand.findOne({
-            where: { id: item.id },
-            query: 'totalRating, totalPosts',
-          });
-          return total.totalRating / total.totalPosts;
+        async resolve(item) {
+          return item.totalRating / item.totalPosts;
         },
       }),
     }),

@@ -415,6 +415,102 @@ input PostsCreateInput {
   data: PostCreateInput
 }
 
+type TasteTag {
+  id: ID!
+  name: String
+  posts(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Post!]
+  _postsMeta(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use postsCount instead."
+    )
+  postsCount(where: PostWhereInput! = {}): Int
+}
+
+input TasteTagWhereInput {
+  AND: [TasteTagWhereInput!]
+  OR: [TasteTagWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+  posts_every: PostWhereInput
+  posts_some: PostWhereInput
+  posts_none: PostWhereInput
+}
+
+input TasteTagWhereUniqueInput {
+  id: ID
+}
+
+enum SortTasteTagsBy {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+input TasteTagOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input TasteTagUpdateInput {
+  name: String
+  posts: PostRelateToManyInput
+}
+
+input TasteTagsUpdateInput {
+  id: ID!
+  data: TasteTagUpdateInput
+}
+
+input TasteTagCreateInput {
+  name: String
+  posts: PostRelateToManyInput
+}
+
+input TasteTagsCreateInput {
+  data: TasteTagCreateInput
+}
+
 type AromaTag {
   id: ID!
   name: String
@@ -511,9 +607,16 @@ input AromaTagsCreateInput {
   data: AromaTagCreateInput
 }
 
-type TasteTag {
+type BrandItemType {
   id: ID!
-  name: String
+  brand: Brand
+  strain: Strain
+  type: Type
+  totalRating: Int
+  totalTHC: Int
+  totalTasteRating: Int
+  totalAromaRating: Int
+  totalPosts: Int
   posts(
     where: PostWhereInput! = {}
     search: String
@@ -536,11 +639,12 @@ type TasteTag {
       reason: "This query will be removed in a future version. Please use postsCount instead."
     )
   postsCount(where: PostWhereInput! = {}): Int
+  avgRating: Float
 }
 
-input TasteTagWhereInput {
-  AND: [TasteTagWhereInput!]
-  OR: [TasteTagWhereInput!]
+input BrandItemTypeWhereInput {
+  AND: [BrandItemTypeWhereInput!]
+  OR: [BrandItemTypeWhereInput!]
   id: ID
   id_not: ID
   id_lt: ID
@@ -549,62 +653,116 @@ input TasteTagWhereInput {
   id_gte: ID
   id_in: [ID!]
   id_not_in: [ID!]
-  name: String
-  name_not: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  name_i: String
-  name_not_i: String
-  name_contains_i: String
-  name_not_contains_i: String
-  name_starts_with_i: String
-  name_not_starts_with_i: String
-  name_ends_with_i: String
-  name_not_ends_with_i: String
-  name_in: [String]
-  name_not_in: [String]
+  brand: BrandWhereInput
+  brand_is_null: Boolean
+  strain: StrainWhereInput
+  strain_is_null: Boolean
+  type: TypeWhereInput
+  type_is_null: Boolean
+  totalRating: Int
+  totalRating_not: Int
+  totalRating_lt: Int
+  totalRating_lte: Int
+  totalRating_gt: Int
+  totalRating_gte: Int
+  totalRating_in: [Int]
+  totalRating_not_in: [Int]
+  totalTHC: Int
+  totalTHC_not: Int
+  totalTHC_lt: Int
+  totalTHC_lte: Int
+  totalTHC_gt: Int
+  totalTHC_gte: Int
+  totalTHC_in: [Int]
+  totalTHC_not_in: [Int]
+  totalTasteRating: Int
+  totalTasteRating_not: Int
+  totalTasteRating_lt: Int
+  totalTasteRating_lte: Int
+  totalTasteRating_gt: Int
+  totalTasteRating_gte: Int
+  totalTasteRating_in: [Int]
+  totalTasteRating_not_in: [Int]
+  totalAromaRating: Int
+  totalAromaRating_not: Int
+  totalAromaRating_lt: Int
+  totalAromaRating_lte: Int
+  totalAromaRating_gt: Int
+  totalAromaRating_gte: Int
+  totalAromaRating_in: [Int]
+  totalAromaRating_not_in: [Int]
+  totalPosts: Int
+  totalPosts_not: Int
+  totalPosts_lt: Int
+  totalPosts_lte: Int
+  totalPosts_gt: Int
+  totalPosts_gte: Int
+  totalPosts_in: [Int]
+  totalPosts_not_in: [Int]
   posts_every: PostWhereInput
   posts_some: PostWhereInput
   posts_none: PostWhereInput
 }
 
-input TasteTagWhereUniqueInput {
+input BrandItemTypeWhereUniqueInput {
   id: ID
 }
 
-enum SortTasteTagsBy {
+enum SortBrandItemTypesBy {
   id_ASC
   id_DESC
-  name_ASC
-  name_DESC
+  totalRating_ASC
+  totalRating_DESC
+  totalTHC_ASC
+  totalTHC_DESC
+  totalTasteRating_ASC
+  totalTasteRating_DESC
+  totalAromaRating_ASC
+  totalAromaRating_DESC
+  totalPosts_ASC
+  totalPosts_DESC
 }
 
-input TasteTagOrderByInput {
+input BrandItemTypeOrderByInput {
   id: OrderDirection
-  name: OrderDirection
+  totalRating: OrderDirection
+  totalTHC: OrderDirection
+  totalTasteRating: OrderDirection
+  totalAromaRating: OrderDirection
+  totalPosts: OrderDirection
 }
 
-input TasteTagUpdateInput {
-  name: String
+input BrandItemTypeUpdateInput {
+  brand: BrandRelateToOneInput
+  strain: StrainRelateToOneInput
+  type: TypeRelateToOneInput
+  totalRating: Int
+  totalTHC: Int
+  totalTasteRating: Int
+  totalAromaRating: Int
+  totalPosts: Int
   posts: PostRelateToManyInput
 }
 
-input TasteTagsUpdateInput {
+input BrandItemTypesUpdateInput {
   id: ID!
-  data: TasteTagUpdateInput
+  data: BrandItemTypeUpdateInput
 }
 
-input TasteTagCreateInput {
-  name: String
+input BrandItemTypeCreateInput {
+  brand: BrandRelateToOneInput
+  strain: StrainRelateToOneInput
+  type: TypeRelateToOneInput
+  totalRating: Int
+  totalTHC: Int
+  totalTasteRating: Int
+  totalAromaRating: Int
+  totalPosts: Int
   posts: PostRelateToManyInput
 }
 
-input TasteTagsCreateInput {
-  data: TasteTagCreateInput
+input BrandItemTypesCreateInput {
+  data: BrandItemTypeCreateInput
 }
 
 type Brand {
@@ -732,121 +890,6 @@ input BrandsCreateInput {
   data: BrandCreateInput
 }
 
-type BrandItemType {
-  id: ID!
-  brand: Brand
-  strain: Strain
-  type: Type
-  totalRating: Int
-  totalPosts: Int
-  posts(
-    where: PostWhereInput! = {}
-    search: String
-    sortBy: [SortPostsBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [PostOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): [Post!]
-  _postsMeta(
-    where: PostWhereInput! = {}
-    search: String
-    sortBy: [SortPostsBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [PostOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): _QueryMeta
-    @deprecated(
-      reason: "This query will be removed in a future version. Please use postsCount instead."
-    )
-  postsCount(where: PostWhereInput! = {}): Int
-}
-
-input BrandItemTypeWhereInput {
-  AND: [BrandItemTypeWhereInput!]
-  OR: [BrandItemTypeWhereInput!]
-  id: ID
-  id_not: ID
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  brand: BrandWhereInput
-  brand_is_null: Boolean
-  strain: StrainWhereInput
-  strain_is_null: Boolean
-  type: TypeWhereInput
-  type_is_null: Boolean
-  totalRating: Int
-  totalRating_not: Int
-  totalRating_lt: Int
-  totalRating_lte: Int
-  totalRating_gt: Int
-  totalRating_gte: Int
-  totalRating_in: [Int]
-  totalRating_not_in: [Int]
-  totalPosts: Int
-  totalPosts_not: Int
-  totalPosts_lt: Int
-  totalPosts_lte: Int
-  totalPosts_gt: Int
-  totalPosts_gte: Int
-  totalPosts_in: [Int]
-  totalPosts_not_in: [Int]
-  posts_every: PostWhereInput
-  posts_some: PostWhereInput
-  posts_none: PostWhereInput
-}
-
-input BrandItemTypeWhereUniqueInput {
-  id: ID
-}
-
-enum SortBrandItemTypesBy {
-  id_ASC
-  id_DESC
-  totalRating_ASC
-  totalRating_DESC
-  totalPosts_ASC
-  totalPosts_DESC
-}
-
-input BrandItemTypeOrderByInput {
-  id: OrderDirection
-  totalRating: OrderDirection
-  totalPosts: OrderDirection
-}
-
-input BrandItemTypeUpdateInput {
-  brand: BrandRelateToOneInput
-  strain: StrainRelateToOneInput
-  type: TypeRelateToOneInput
-  totalRating: Int
-  totalPosts: Int
-  posts: PostRelateToManyInput
-}
-
-input BrandItemTypesUpdateInput {
-  id: ID!
-  data: BrandItemTypeUpdateInput
-}
-
-input BrandItemTypeCreateInput {
-  brand: BrandRelateToOneInput
-  strain: StrainRelateToOneInput
-  type: TypeRelateToOneInput
-  totalRating: Int
-  totalPosts: Int
-  posts: PostRelateToManyInput
-}
-
-input BrandItemTypesCreateInput {
-  data: BrandItemTypeCreateInput
-}
-
 type Strain {
   id: ID!
   name: String
@@ -943,91 +986,31 @@ input StrainsCreateInput {
   data: StrainCreateInput
 }
 
-type Type {
-  id: ID!
-  name: String
-  posts: Post
-}
-
-input TypeWhereInput {
-  AND: [TypeWhereInput!]
-  OR: [TypeWhereInput!]
-  id: ID
-  id_not: ID
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  name: String
-  name_not: String
-  name_contains: String
-  name_not_contains: String
-  name_starts_with: String
-  name_not_starts_with: String
-  name_ends_with: String
-  name_not_ends_with: String
-  name_i: String
-  name_not_i: String
-  name_contains_i: String
-  name_not_contains_i: String
-  name_starts_with_i: String
-  name_not_starts_with_i: String
-  name_ends_with_i: String
-  name_not_ends_with_i: String
-  name_in: [String]
-  name_not_in: [String]
-  posts: PostWhereInput
-  posts_is_null: Boolean
-}
-
-input TypeWhereUniqueInput {
-  id: ID
-}
-
-enum SortTypesBy {
-  id_ASC
-  id_DESC
-  name_ASC
-  name_DESC
-}
-
-input TypeOrderByInput {
-  id: OrderDirection
-  name: OrderDirection
-}
-
-input TypeUpdateInput {
-  name: String
-  posts: PostRelateToOneInput
-}
-
-input PostRelateToOneInput {
-  create: PostCreateInput
-  connect: PostWhereUniqueInput
-  disconnect: PostWhereUniqueInput
-  disconnectAll: Boolean
-}
-
-input TypesUpdateInput {
-  id: ID!
-  data: TypeUpdateInput
-}
-
-input TypeCreateInput {
-  name: String
-  posts: PostRelateToOneInput
-}
-
-input TypesCreateInput {
-  data: TypeCreateInput
-}
-
 type Pheno {
   id: ID!
   name: String
-  posts: Post
+  posts(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Post!]
+  _postsMeta(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use postsCount instead."
+    )
+  postsCount(where: PostWhereInput! = {}): Int
 }
 
 input PhenoWhereInput {
@@ -1059,8 +1042,9 @@ input PhenoWhereInput {
   name_not_ends_with_i: String
   name_in: [String]
   name_not_in: [String]
-  posts: PostWhereInput
-  posts_is_null: Boolean
+  posts_every: PostWhereInput
+  posts_some: PostWhereInput
+  posts_none: PostWhereInput
 }
 
 input PhenoWhereUniqueInput {
@@ -1081,7 +1065,7 @@ input PhenoOrderByInput {
 
 input PhenoUpdateInput {
   name: String
-  posts: PostRelateToOneInput
+  posts: PostRelateToManyInput
 }
 
 input PhenosUpdateInput {
@@ -1091,11 +1075,107 @@ input PhenosUpdateInput {
 
 input PhenoCreateInput {
   name: String
-  posts: PostRelateToOneInput
+  posts: PostRelateToManyInput
 }
 
 input PhenosCreateInput {
   data: PhenoCreateInput
+}
+
+type Type {
+  id: ID!
+  name: String
+  posts(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Post!]
+  _postsMeta(
+    where: PostWhereInput! = {}
+    search: String
+    sortBy: [SortPostsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [PostOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use postsCount instead."
+    )
+  postsCount(where: PostWhereInput! = {}): Int
+}
+
+input TypeWhereInput {
+  AND: [TypeWhereInput!]
+  OR: [TypeWhereInput!]
+  id: ID
+  id_not: ID
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  name: String
+  name_not: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  name_i: String
+  name_not_i: String
+  name_contains_i: String
+  name_not_contains_i: String
+  name_starts_with_i: String
+  name_not_starts_with_i: String
+  name_ends_with_i: String
+  name_not_ends_with_i: String
+  name_in: [String]
+  name_not_in: [String]
+  posts_every: PostWhereInput
+  posts_some: PostWhereInput
+  posts_none: PostWhereInput
+}
+
+input TypeWhereUniqueInput {
+  id: ID
+}
+
+enum SortTypesBy {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+input TypeOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+}
+
+input TypeUpdateInput {
+  name: String
+  posts: PostRelateToManyInput
+}
+
+input TypesUpdateInput {
+  id: ID!
+  data: TypeUpdateInput
+}
+
+input TypeCreateInput {
+  name: String
+  posts: PostRelateToManyInput
+}
+
+input TypesCreateInput {
+  data: TypeCreateInput
 }
 
 """
@@ -1119,48 +1199,48 @@ type Mutation {
   updatePosts(data: [PostsUpdateInput]): [Post]
   deletePost(id: ID!): Post
   deletePosts(ids: [ID!]): [Post]
-  createAromaTag(data: AromaTagCreateInput): AromaTag
-  createAromaTags(data: [AromaTagsCreateInput]): [AromaTag]
-  updateAromaTag(id: ID!, data: AromaTagUpdateInput): AromaTag
-  updateAromaTags(data: [AromaTagsUpdateInput]): [AromaTag]
-  deleteAromaTag(id: ID!): AromaTag
-  deleteAromaTags(ids: [ID!]): [AromaTag]
   createTasteTag(data: TasteTagCreateInput): TasteTag
   createTasteTags(data: [TasteTagsCreateInput]): [TasteTag]
   updateTasteTag(id: ID!, data: TasteTagUpdateInput): TasteTag
   updateTasteTags(data: [TasteTagsUpdateInput]): [TasteTag]
   deleteTasteTag(id: ID!): TasteTag
   deleteTasteTags(ids: [ID!]): [TasteTag]
-  createBrand(data: BrandCreateInput): Brand
-  createBrands(data: [BrandsCreateInput]): [Brand]
-  updateBrand(id: ID!, data: BrandUpdateInput): Brand
-  updateBrands(data: [BrandsUpdateInput]): [Brand]
-  deleteBrand(id: ID!): Brand
-  deleteBrands(ids: [ID!]): [Brand]
+  createAromaTag(data: AromaTagCreateInput): AromaTag
+  createAromaTags(data: [AromaTagsCreateInput]): [AromaTag]
+  updateAromaTag(id: ID!, data: AromaTagUpdateInput): AromaTag
+  updateAromaTags(data: [AromaTagsUpdateInput]): [AromaTag]
+  deleteAromaTag(id: ID!): AromaTag
+  deleteAromaTags(ids: [ID!]): [AromaTag]
   createBrandItemType(data: BrandItemTypeCreateInput): BrandItemType
   createBrandItemTypes(data: [BrandItemTypesCreateInput]): [BrandItemType]
   updateBrandItemType(id: ID!, data: BrandItemTypeUpdateInput): BrandItemType
   updateBrandItemTypes(data: [BrandItemTypesUpdateInput]): [BrandItemType]
   deleteBrandItemType(id: ID!): BrandItemType
   deleteBrandItemTypes(ids: [ID!]): [BrandItemType]
+  createBrand(data: BrandCreateInput): Brand
+  createBrands(data: [BrandsCreateInput]): [Brand]
+  updateBrand(id: ID!, data: BrandUpdateInput): Brand
+  updateBrands(data: [BrandsUpdateInput]): [Brand]
+  deleteBrand(id: ID!): Brand
+  deleteBrands(ids: [ID!]): [Brand]
   createStrain(data: StrainCreateInput): Strain
   createStrains(data: [StrainsCreateInput]): [Strain]
   updateStrain(id: ID!, data: StrainUpdateInput): Strain
   updateStrains(data: [StrainsUpdateInput]): [Strain]
   deleteStrain(id: ID!): Strain
   deleteStrains(ids: [ID!]): [Strain]
-  createType(data: TypeCreateInput): Type
-  createTypes(data: [TypesCreateInput]): [Type]
-  updateType(id: ID!, data: TypeUpdateInput): Type
-  updateTypes(data: [TypesUpdateInput]): [Type]
-  deleteType(id: ID!): Type
-  deleteTypes(ids: [ID!]): [Type]
   createPheno(data: PhenoCreateInput): Pheno
   createPhenos(data: [PhenosCreateInput]): [Pheno]
   updatePheno(id: ID!, data: PhenoUpdateInput): Pheno
   updatePhenos(data: [PhenosUpdateInput]): [Pheno]
   deletePheno(id: ID!): Pheno
   deletePhenos(ids: [ID!]): [Pheno]
+  createType(data: TypeCreateInput): Type
+  createTypes(data: [TypesCreateInput]): [Type]
+  updateType(id: ID!, data: TypeUpdateInput): Type
+  updateTypes(data: [TypesUpdateInput]): [Type]
+  deleteType(id: ID!): Type
+  deleteTypes(ids: [ID!]): [Type]
   authenticateUserWithPassword(
     email: String!
     password: String!
@@ -1248,29 +1328,6 @@ type Query {
       reason: "This query will be removed in a future version. Please use postsCount instead."
     )
   postsCount(where: PostWhereInput! = {}): Int
-  allAromaTags(
-    where: AromaTagWhereInput! = {}
-    search: String
-    sortBy: [SortAromaTagsBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [AromaTagOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): [AromaTag!]
-  AromaTag(where: AromaTagWhereUniqueInput!): AromaTag
-  _allAromaTagsMeta(
-    where: AromaTagWhereInput! = {}
-    search: String
-    sortBy: [SortAromaTagsBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [AromaTagOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): _QueryMeta
-    @deprecated(
-      reason: "This query will be removed in a future version. Please use aromaTagsCount instead."
-    )
-  aromaTagsCount(where: AromaTagWhereInput! = {}): Int
   allTasteTags(
     where: TasteTagWhereInput! = {}
     search: String
@@ -1294,29 +1351,29 @@ type Query {
       reason: "This query will be removed in a future version. Please use tasteTagsCount instead."
     )
   tasteTagsCount(where: TasteTagWhereInput! = {}): Int
-  allBrands(
-    where: BrandWhereInput! = {}
+  allAromaTags(
+    where: AromaTagWhereInput! = {}
     search: String
-    sortBy: [SortBrandsBy!]
+    sortBy: [SortAromaTagsBy!]
       @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [BrandOrderByInput!]! = []
+    orderBy: [AromaTagOrderByInput!]! = []
     first: Int
     skip: Int! = 0
-  ): [Brand!]
-  Brand(where: BrandWhereUniqueInput!): Brand
-  _allBrandsMeta(
-    where: BrandWhereInput! = {}
+  ): [AromaTag!]
+  AromaTag(where: AromaTagWhereUniqueInput!): AromaTag
+  _allAromaTagsMeta(
+    where: AromaTagWhereInput! = {}
     search: String
-    sortBy: [SortBrandsBy!]
+    sortBy: [SortAromaTagsBy!]
       @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [BrandOrderByInput!]! = []
+    orderBy: [AromaTagOrderByInput!]! = []
     first: Int
     skip: Int! = 0
   ): _QueryMeta
     @deprecated(
-      reason: "This query will be removed in a future version. Please use brandsCount instead."
+      reason: "This query will be removed in a future version. Please use aromaTagsCount instead."
     )
-  brandsCount(where: BrandWhereInput! = {}): Int
+  aromaTagsCount(where: AromaTagWhereInput! = {}): Int
   allBrandItemTypes(
     where: BrandItemTypeWhereInput! = {}
     search: String
@@ -1340,6 +1397,29 @@ type Query {
       reason: "This query will be removed in a future version. Please use brandItemTypesCount instead."
     )
   brandItemTypesCount(where: BrandItemTypeWhereInput! = {}): Int
+  allBrands(
+    where: BrandWhereInput! = {}
+    search: String
+    sortBy: [SortBrandsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [BrandOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Brand!]
+  Brand(where: BrandWhereUniqueInput!): Brand
+  _allBrandsMeta(
+    where: BrandWhereInput! = {}
+    search: String
+    sortBy: [SortBrandsBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [BrandOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use brandsCount instead."
+    )
+  brandsCount(where: BrandWhereInput! = {}): Int
   allStrains(
     where: StrainWhereInput! = {}
     search: String
@@ -1363,29 +1443,6 @@ type Query {
       reason: "This query will be removed in a future version. Please use strainsCount instead."
     )
   strainsCount(where: StrainWhereInput! = {}): Int
-  allTypes(
-    where: TypeWhereInput! = {}
-    search: String
-    sortBy: [SortTypesBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [TypeOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): [Type!]
-  Type(where: TypeWhereUniqueInput!): Type
-  _allTypesMeta(
-    where: TypeWhereInput! = {}
-    search: String
-    sortBy: [SortTypesBy!]
-      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
-    orderBy: [TypeOrderByInput!]! = []
-    first: Int
-    skip: Int! = 0
-  ): _QueryMeta
-    @deprecated(
-      reason: "This query will be removed in a future version. Please use typesCount instead."
-    )
-  typesCount(where: TypeWhereInput! = {}): Int
   allPhenos(
     where: PhenoWhereInput! = {}
     search: String
@@ -1409,6 +1466,29 @@ type Query {
       reason: "This query will be removed in a future version. Please use phenosCount instead."
     )
   phenosCount(where: PhenoWhereInput! = {}): Int
+  allTypes(
+    where: TypeWhereInput! = {}
+    search: String
+    sortBy: [SortTypesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [TypeOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): [Type!]
+  Type(where: TypeWhereUniqueInput!): Type
+  _allTypesMeta(
+    where: TypeWhereInput! = {}
+    search: String
+    sortBy: [SortTypesBy!]
+      @deprecated(reason: "sortBy has been deprecated in favour of orderBy")
+    orderBy: [TypeOrderByInput!]! = []
+    first: Int
+    skip: Int! = 0
+  ): _QueryMeta
+    @deprecated(
+      reason: "This query will be removed in a future version. Please use typesCount instead."
+    )
+  typesCount(where: TypeWhereInput! = {}): Int
   authenticatedItem: AuthenticatedItem
   keystone: KeystoneMeta!
 }
