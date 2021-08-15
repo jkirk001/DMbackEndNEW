@@ -149,6 +149,7 @@ type Post {
   strain: Strain
   type: Type
   pheno: Pheno
+  rel: BrandItemType
   rating: Int
   tasteRating: Int
   aromaRating: Int
@@ -226,6 +227,8 @@ input PostWhereInput {
   type_is_null: Boolean
   pheno: PhenoWhereInput
   pheno_is_null: Boolean
+  rel: BrandItemTypeWhereInput
+  rel_is_null: Boolean
   rating: Int
   rating_not: Int
   rating_lt: Int
@@ -316,6 +319,7 @@ input PostUpdateInput {
   strain: StrainRelateToOneInput
   type: TypeRelateToOneInput
   pheno: PhenoRelateToOneInput
+  rel: BrandItemTypeRelateToOneInput
   rating: Int
   tasteRating: Int
   aromaRating: Int
@@ -356,6 +360,13 @@ input PhenoRelateToOneInput {
   disconnectAll: Boolean
 }
 
+input BrandItemTypeRelateToOneInput {
+  create: BrandItemTypeCreateInput
+  connect: BrandItemTypeWhereUniqueInput
+  disconnect: BrandItemTypeWhereUniqueInput
+  disconnectAll: Boolean
+}
+
 input UserRelateToOneInput {
   create: UserCreateInput
   connect: UserWhereUniqueInput
@@ -387,6 +398,7 @@ input PostCreateInput {
   strain: StrainRelateToOneInput
   type: TypeRelateToOneInput
   pheno: PhenoRelateToOneInput
+  rel: BrandItemTypeRelateToOneInput
   rating: Int
   tasteRating: Int
   aromaRating: Int

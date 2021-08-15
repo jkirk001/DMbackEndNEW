@@ -17,29 +17,31 @@ model User {
 }
 
 model Post {
-  id                       String          @id @default(cuid())
-  brand                    Brand?          @relation("Post_brand", fields: [brandId], references: [id])
-  brandId                  String?         @map("brand")
-  strain                   Strain?         @relation("Post_strain", fields: [strainId], references: [id])
-  strainId                 String?         @map("strain")
-  type                     Type?           @relation("Post_type", fields: [typeId], references: [id])
-  typeId                   String?         @unique @map("type")
-  pheno                    Pheno?          @relation("Pheno_posts")
-  rating                   Int?
-  tasteRating              Int?
-  aromaRating              Int?
-  thc                      Int?
-  status                   String?
-  content                  Json?
-  publishDate              DateTime?
-  author                   User?           @relation("Post_author", fields: [authorId], references: [id])
-  authorId                 String?         @map("author")
-  aromaTags                AromaTag[]      @relation("AromaTag_posts_Post_aromaTags")
-  tasteTags                TasteTag[]      @relation("Post_tasteTags_TasteTag_posts")
-  from_BrandItemType_posts BrandItemType[] @relation("BrandItemType_posts_many")
+  id          String         @id @default(cuid())
+  brand       Brand?         @relation("Post_brand", fields: [brandId], references: [id])
+  brandId     String?        @map("brand")
+  strain      Strain?        @relation("Post_strain", fields: [strainId], references: [id])
+  strainId    String?        @map("strain")
+  type        Type?          @relation("Post_type", fields: [typeId], references: [id])
+  typeId      String?        @unique @map("type")
+  pheno       Pheno?         @relation("Pheno_posts")
+  rel         BrandItemType? @relation("Post_rel", fields: [relId], references: [id])
+  relId       String?        @map("rel")
+  rating      Int?
+  tasteRating Int?
+  aromaRating Int?
+  thc         Int?
+  status      String?
+  content     Json?
+  publishDate DateTime?
+  author      User?          @relation("Post_author", fields: [authorId], references: [id])
+  authorId    String?        @map("author")
+  aromaTags   AromaTag[]     @relation("AromaTag_posts_Post_aromaTags")
+  tasteTags   TasteTag[]     @relation("Post_tasteTags_TasteTag_posts")
 
   @@index([brandId])
   @@index([strainId])
+  @@index([relId])
   @@index([authorId])
 }
 
@@ -74,7 +76,7 @@ model BrandItemType {
   typeId      String? @map("type")
   totalRating Int?
   totalPosts  Int?
-  posts       Post[]  @relation("BrandItemType_posts_many")
+  posts       Post[]  @relation("Post_rel")
 
   @@index([brandId])
   @@index([strainId])
